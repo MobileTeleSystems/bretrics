@@ -1,7 +1,7 @@
 process.env.BRETRICS_PERCENTILES ||= "[0.01, 0.1, 0.25, 0.5, 0.75, 0.9, 0.99]";
 process.env.BRETRICS_MAXAGESECONDS ||= "600";
 process.env.BRETRICS_AGEBUCKETS ||= "5";
-process.env.BRETRICS_PREFIX ||= "webmon_";
+process.env.BRETRICS_PREFIX ||= "bretrics_";
 process.env.BRETRICS_LABELS ||= "device_type,path";
 
 process.env.PROM_ELPRECISION ||= "100";

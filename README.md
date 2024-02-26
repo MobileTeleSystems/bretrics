@@ -43,8 +43,8 @@ docker run -d --restart always -p 3000:3000 mtsrus/bretrics
 
 - `-e BRETRICS_AGEBUCKETS=5` - configures how many buckets we will have in our sliding window for the summary, default 5.
 
-- `-e BRETRICS_PREFIX="webmon_"` - prefix of web monitoring values,
-    default webmon_.
+- `-e BRETRICS_PREFIX="bretrics_"` - prefix of web monitoring values,
+    default bretrics_.
 
 - `-e PROM_ELPRECISION=100` - nodejs event loop precision for system metrics, default 100.
 
