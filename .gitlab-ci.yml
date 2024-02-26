@@ -1,0 +1,60 @@
+# Kaniko source file
+# https://gitlab.services.mts.ru/docker/kaniko/-/blob/master/v1.8.0/Dockerfile
+
+workflow:
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main"
+          variables:
+              CI_REGISTRY_IMAGE: "sregistry.mts.ru/guild-frontend/webprometheus:latest"
+        - if: $CI_COMMIT_BRANCH == "develop"
+          variables:
+              CI_REGISTRY_IMAGE: "sregistry.mts.ru/guild-frontend/webprometheus:develop"
+
+stages:
+    - build
+    - deploy
+
+build:
+    stage: build
+    image:
+        name: central-mirror.services.mts.ru/kaniko-project/executor:v1.8.1-debug
+        entrypoint: [""]
+    script:
+        - mkdir -p /kaniko/.docker
+        - echo
+          "{\"auths\":{\"$MTS_REGISTRY\":{\"username\":\"$MTS_REGISTRY_RWUSER\",\"password\":\"$MTS_REGISTRY_RWUSER_TOKEN\"}}}"
+          > /kaniko/.docker/config.json
+        - cat ./mts-cert.pem >> /kaniko/ssl/certs/ca-certificates.crt
+        - /kaniko/executor --context="${CI_PROJECT_DIR}" --cache=true
+          --cache-ttl=24h --cache-repo="sregistry.mts.ru/guild-frontend/kaniko-cache"
+          --dockerfile="${CI_PROJECT_DIR}/Dockerfile"
+          --destination="${CI_REGISTRY_IMAGE}"
+          --registry-mirror=central-mirror.services.mts.ru
+
+
+deploy:develop:
+    stage: deploy
+    only:
+        - main
+    trigger:
+        project: rupolka/devops/deploy-front
+        branch: develop
+        strategy: depend
+
+deploy:beta:
+    stage: deploy
+    only:
+        - main
+    trigger:
+        project: rupolka/devops/deploy-front
+        branch: beta
+        strategy: depend
+
+deploy:master:
+    stage: deploy
+    only:
+        - main
+    trigger:
+        project: rupolka/devops/deploy-front
+        branch: master
+        strategy: depend
