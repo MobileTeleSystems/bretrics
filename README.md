@@ -1,4 +1,4 @@
-# Microservice for monitoring client web application by prometheus.
+# Bretrics - Microservice for realtime monitoring of users in browsers by prometheus.
 
 The microservice contains an API that accepts metrics from the client browser, as well as an exporter for Prometheus metrics..
 
