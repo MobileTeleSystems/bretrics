@@ -2,13 +2,14 @@ FROM node:24-alpine AS build
 
 WORKDIR /app
 
-COPY package*.json tsconfig*.json nest-cli.json ./
+COPY package*.json tsconfig*.json nest-cli.json eslint.config.mjs ./
 RUN npm ci
 
 COPY ./src ./src
 COPY ./test ./test
 
-# RUN npm run test
+RUN npm run test
+RUN npm run test:e2e
 RUN npm run build
 
 

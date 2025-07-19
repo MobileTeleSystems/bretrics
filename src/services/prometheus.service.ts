@@ -37,7 +37,7 @@ export class PrometheusService {
             }
 
             // set metrics
-            const summary = this.metrics.get(metricName);
+            const summary = this.metrics.get(metricName) as Summary;
             const metricValue = Reflect.get(metrics, metricName);
 
             if (typeof metricValue === "number") {
