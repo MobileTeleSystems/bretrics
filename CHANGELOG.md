@@ -12,5 +12,4 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation
 
 - Minor readme update
-- Minor readme update
 
