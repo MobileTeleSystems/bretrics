@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2025-07-19
+
+### 🚀 Features
+
+- Add second e2e test
+
 ## [1.1.1] - 2025-07-19
 
 ### ⚙️ Miscellaneous Tasks
