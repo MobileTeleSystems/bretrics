@@ -22,7 +22,7 @@ Now you can see the sent metrics in the exporter at the URL `http://localhost:30
 Send metrics with labels:
 
 ```sh
-curl -d '{"fcp": {"value": 5, "labels": {"path": "/app", "type": "mobile"}}}' -H 'Content-Type: application/json' -X POST http://localhost:3000/send-metrics/metrics
+curl -d '{"fcp": {"value": 5, "labels": {"path": "/app", "device_type": "mobile"}}}' -H 'Content-Type: application/json' -X POST http://localhost:3000/send-metrics/metrics
 ```
 
 ## Use
