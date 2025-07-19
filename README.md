@@ -1,6 +1,7 @@
-# Bretrics - Microservice for realtime monitoring of users in browsers by prometheus.
 
-The microservice contains an API that accepts metrics from the client browser, as well as an exporter for Prometheus metrics..
+# Bretrics — Microservice for real-time monitoring of users in browsers via Prometheus.
+
+The microservice contains an API that accepts metrics from the client browser, as well as an exporter for Prometheus metrics.
 
 ## Try
 
@@ -10,13 +11,13 @@ To try the microservice features, run the container with the command:
 docker run -it --rm -p 3000:3000 mtsrus/bretrics
 ```
 
-Now you can check the work with the command:
+Now you can check its operation with the command:
 
 ```sh
 curl -d '{"fcp": 0.5, "cls": 1, "tti": 2}' -H 'Content-Type: application/json' -X POST http://localhost:3000/send-metrics/metrics
 ```
 
-Now you can see sended metrics in the exporter by url `http://localhost:3000/metrics`.
+Now you can see the sent metrics in the exporter at the URL `http://localhost:3000/metrics`.
 
 Send metrics with labels:
 
@@ -34,29 +35,29 @@ docker run -d --restart always -p 3000:3000 mtsrus/bretrics
 
 ## Container parameters
 
-- `-e PORT=3000` - the port on which the microservice will be launched, default 3000.
+- `-e PORT=3000` — the port on which the microservice will be launched, default is 3000.
 
-- `-e BRETRICS_PERCENTILES=[0.01, 0.1, 0.25, 0.5, 0.75, 0.9, 0.99]` - percentiles of prometheus values,
-    default [0.01, 0.1, 0.25, 0.5, 0.75, 0.9, 0.99].
+- `-e BRETRICS_PERCENTILES=[0.01, 0.1, 0.25, 0.5, 0.75, 0.9, 0.99]` — percentiles of Prometheus values,
+  default: [0.01, 0.1, 0.25, 0.5, 0.75, 0.9, 0.99].
 
-- `-e BRETRICS_MAXAGESECONDS=600` - will tell how old a bucket can be before it is reset, in seconds, default 600 seconds.
+- `-e BRETRICS_MAXAGESECONDS=600` — how old a bucket can be before it is reset, in seconds, default is 600 seconds.
 
-- `-e BRETRICS_AGEBUCKETS=5` - configures how many buckets we will have in our sliding window for the summary, default 5.
+- `-e BRETRICS_AGEBUCKETS=5` — configures how many buckets will be in the sliding window for the summary, default is 5.
 
-- `-e BRETRICS_PREFIX="bretrics_"` - prefix of web monitoring values,
-    default bretrics_.
+- `-e BRETRICS_PREFIX="bretrics_"` — prefix for web monitoring values,
+  default: bretrics_.
 
-- `-e PROM_ELPRECISION=100` - nodejs event loop precision for system metrics, default 100.
+- `-e PROM_ELPRECISION=100` — Node.js event loop precision for system metrics, default is 100.
 
-- `-e PROM_PREFIX=""` - prefix for all prometheus metrics,
-    default empty string.
+- `-e PROM_PREFIX=""` — prefix for all Prometheus metrics,
+  default: empty string.
 
-## Metrics Prometheus
+## Prometheus Metrics
 
-The microservice has built-in Prometheus monitoring and is located on the endpoint `/metrics`.
+The microservice has built-in Prometheus monitoring and is available at the endpoint `/metrics`.
 
-Block this endpoint on the proxy if you do not need to provide access to metrics from outside your network.
+Block this endpoint on your proxy if you do not need to provide access to metrics from outside your network.
 
-## Components for web
+## Components for the Web
 
 To send metrics from the client, you need to write code that will send metrics to the microservice. An [example of such code can be found here](https://web.dev/vitals/).
