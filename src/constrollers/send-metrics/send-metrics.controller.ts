@@ -25,7 +25,7 @@ export class SendMetricsController {
         if (request.readable) {
             const raw = await rawbody(request);
             const text = raw.toString().trim();
-            metrics = JSON.parse(text);
+            metrics = JSON.parse(text) as Record<string, number | IMetric>;
         }
 
         const metricNames = Reflect.ownKeys(metrics) as string[];

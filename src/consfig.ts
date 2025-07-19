@@ -8,12 +8,13 @@ process.env.PROM_ELPRECISION ||= "100";
 process.env.PROM_PREFIX ||= "";
 
 export const config = {
-    percentiles: JSON.parse(process.env.BRETRICS_PERCENTILES),
-    maxAgeSeconds: JSON.parse(process.env.BRETRICS_MAXAGESECONDS),
-    ageBuckets: JSON.parse(process.env.BRETRICS_AGEBUCKETS),
+    percentiles: JSON.parse(process.env.BRETRICS_PERCENTILES) as number[],
+    maxAgeSeconds: JSON.parse(process.env.BRETRICS_MAXAGESECONDS) as number,
+    ageBuckets: JSON.parse(process.env.BRETRICS_AGEBUCKETS) as number,
     prefix: process.env.BRETRICS_PREFIX,
     labels: process.env.BRETRICS_LABELS.split(","),
-
-    eventLoopMonitoringPrecision: JSON.parse(process.env.PROM_ELPRECISION),
+    eventLoopMonitoringPrecision: JSON.parse(
+        process.env.PROM_ELPRECISION
+    ) as number,
     promPrefix: process.env.PROM_PREFIX
 };

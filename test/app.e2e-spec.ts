@@ -1,24 +1,41 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import { Test, TestingModule } from "@nestjs/testing";
+import { INestApplication } from "@nestjs/common";
+import * as request from "supertest";
+import { AppModule } from "./../src/app.module";
 
-describe('AppController (e2e)', () => {
-  let app: INestApplication;
+describe("AppController (e2e)", () => {
+    let app: INestApplication;
 
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+    beforeEach(async () => {
+        const moduleFixture: TestingModule = await Test.createTestingModule({
+            imports: [AppModule]
+        }).compile();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
-  });
+        app = moduleFixture.createNestApplication();
+        await app.init();
+    });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
-  });
+    afterEach(async () => {
+        await app.close();
+        jest.clearAllTimers();
+    });
+
+    it("/send-metrics/metrics (POST) + /metrics (GET)", async () => {
+        // 1. Отправляем метрику
+        const metricName = "test_metric_e2e";
+        const metricValue = 42;
+        await request(app.getHttpServer())
+            .post("/send-metrics/metrics")
+            .send({ [metricName]: metricValue })
+            .expect(201); // NestJS по умолчанию возвращает 201 для POST
+
+        // 2. Получаем метрики
+        const res = await request(app.getHttpServer())
+            .get("/metrics")
+            .expect(200);
+
+        // 3. Проверяем, что наша метрика есть в ответе
+        expect(res.text).toContain(metricName);
+    });
 });
