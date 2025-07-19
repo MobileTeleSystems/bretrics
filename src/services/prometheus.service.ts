@@ -1,5 +1,5 @@
 import { collectDefaultMetrics, Registry, Summary } from "prom-client";
-import { config } from "../consfig";
+import { config } from "../config";
 import { IMetric } from "../models/IMetric.interface";
 
 export class PrometheusService {

@@ -38,4 +38,31 @@ describe("AppController (e2e)", () => {
         // 3. Проверяем, что наша метрика есть в ответе
         expect(res.text).toContain(metricName);
     });
+
+    it("/send-metrics/metrics (POST, IMetric) + /metrics (GET)", async () => {
+        // 1. Отправляем метрику в формате IMetric (value + labels)
+        const metricName = "test_metric_imetric_e2e";
+        const metricValue = 123;
+        const labels = { path: "/test", device_type: "e2e" };
+        const payload = {
+            [metricName]: {
+                value: metricValue,
+                labels
+            }
+        };
+        await request(app.getHttpServer())
+            .post("/send-metrics/metrics")
+            .send(payload)
+            .expect(201);
+
+        // 2. Получаем метрики
+        const res = await request(app.getHttpServer())
+            .get("/metrics")
+            .expect(200);
+
+        // 3. Проверяем, что метрика и лейблы есть в ответе
+        expect(res.text).toContain(metricName);
+        expect(res.text).toContain('path="/test"');
+        expect(res.text).toContain('device_type="e2e"');
+    });
 });
