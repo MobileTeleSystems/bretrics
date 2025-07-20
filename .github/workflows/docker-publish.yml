@@ -45,7 +45,6 @@ jobs:
 
 
       - name: Get version from package.json
-        id: pkg
         run: |
           VERSION=$(node -p "require('./package.json').version")
           echo "VERSION=$VERSION" >> $GITHUB_ENV
@@ -59,7 +58,6 @@ jobs:
           push: true
           tags: |
             mtsrus/bretrics:latest
-            mtsrus/bretrics:${{ env.VERSION }}
             mtsrus/bretrics:${{ env.MAJOR }}
             mtsrus/bretrics:${{ env.MAJOR }}.${{ env.MINOR }}
             mtsrus/bretrics:${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}
