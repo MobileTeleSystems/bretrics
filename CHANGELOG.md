@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.3] - 2025-07-20
+
+### 🐛 Bug Fixes
+
+- Improve version extraction from package.json for Docker image tagging
+
 ## [1.2.2] - 2025-07-20
 
 ## [1.2.1] - 2025-07-19
