@@ -47,4 +47,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: mtsrus/bretrics:latest, mtsrus/bretrics:1, mtsrus/bretrics:1.0, mtsrus/bretrics:1.0.0
+          tags: mtsrus/bretrics:latest, mtsrus/bretrics:1, mtsrus/bretrics:1.2, mtsrus/bretrics:1.2.0
