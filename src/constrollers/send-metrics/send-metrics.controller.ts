@@ -42,7 +42,12 @@ export class SendMetricsController {
 
             if (typeof value === "number") {
                 // fine
-            } else if ("value" in value && typeof value.value === "number") {
+            } else if (
+                typeof value === "object" &&
+                value !== null &&
+                "value" in value &&
+                typeof value.value === "number"
+            ) {
                 // fine
             } else {
                 const strValue = JSON.stringify(value);
