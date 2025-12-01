@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.4] - 2025-07-20
+
+### 🐛 Bug Fixes
+
+- Remove unused version variable from Docker publish workflow
+
 ## [1.2.3] - 2025-07-20
 
 ### 🐛 Bug Fixes
