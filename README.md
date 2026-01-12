@@ -1,63 +1,163 @@
 
-# Bretrics — Microservice for real-time monitoring of users in browsers via Prometheus.
+# Bretrics
 
-The microservice contains an API that accepts metrics from the client browser, as well as an exporter for Prometheus metrics.
+[![Docker](https://img.shields.io/docker/v/mtsrus/bretrics?label=Docker&logo=docker)](https://hub.docker.com/r/mtsrus/bretrics)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![NestJS](https://img.shields.io/badge/NestJS-11.x-E0234E?logo=nestjs)](https://nestjs.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-24.x-339933?logo=node.js)](https://nodejs.org/)
 
-## Try
+> **Real-time browser metrics collection microservice for Prometheus**
 
-To try the microservice features, run the container with the command:
+Bretrics is a lightweight, high-performance microservice that collects [Web Vitals](https://web.dev/vitals/) and custom metrics from client browsers and exposes them via a Prometheus-compatible endpoint.
+
+## ✨ Features
+
+- 📊 **Web Vitals Support** — Collect FCP, LCP, CLS, TTI, and custom metrics
+- 🏷️ **Custom Labels** — Add dimensions like path, device type, or user segments
+- 📈 **Prometheus Native** — Built-in `/metrics` endpoint with configurable percentiles
+- 🐳 **Docker Ready** — Production-ready container images
+- ⚡ **High Performance** — Built on NestJS with minimal overhead
+- 🔧 **Configurable** — Flexible environment variable configuration
+
+## 🚀 Quick Start
+
+### Using Docker
 
 ```sh
 docker run -it --rm -p 3000:3000 mtsrus/bretrics
 ```
 
-Now you can check its operation with the command:
+### Send Test Metrics
 
 ```sh
-curl -d '{"fcp": 0.5, "cls": 1, "tti": 2}' -H 'Content-Type: application/json' -X POST http://localhost:3000/send-metrics/metrics
+# Simple metrics
+curl -X POST http://localhost:3000/send-metrics/metrics \
+  -H 'Content-Type: application/json' \
+  -d '{"fcp": 0.5, "cls": 1, "tti": 2}'
+
+# Metrics with labels
+curl -X POST http://localhost:3000/send-metrics/metrics \
+  -H 'Content-Type: application/json' \
+  -d '{"fcp": {"value": 5, "labels": {"path": "/app", "device_type": "mobile"}}}'
 ```
 
-Now you can see the sent metrics in the exporter at the URL `http://localhost:3000/metrics`.
+### View Metrics
 
-Send metrics with labels:
+Open [http://localhost:3000/metrics](http://localhost:3000/metrics) to see Prometheus-formatted metrics.
+
+## 📦 Installation
+
+### Production Deployment
 
 ```sh
-curl -d '{"fcp": {"value": 5, "labels": {"path": "/app", "device_type": "mobile"}}}' -H 'Content-Type: application/json' -X POST http://localhost:3000/send-metrics/metrics
+docker run -d \
+  --name bretrics \
+  --restart always \
+  -p 3000:3000 \
+  mtsrus/bretrics
 ```
 
-## Use
+### Docker Compose
 
-To start the microservice in production, use the command:
-
-```sh
-docker run -d --restart always -p 3000:3000 mtsrus/bretrics
+```yaml
+services:
+  bretrics:
+    image: mtsrus/bretrics:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - BRETRICS_PREFIX=bretrics_
+    restart: always
 ```
 
-## Container parameters
+## ⚙️ Configuration
 
-- `-e PORT=3000` — the port on which the microservice will be launched, default is 3000.
+All configuration is done via environment variables:
 
-- `-e BRETRICS_PERCENTILES=[0.01, 0.1, 0.25, 0.5, 0.75, 0.9, 0.99]` — percentiles of Prometheus values,
-  default: [0.01, 0.1, 0.25, 0.5, 0.75, 0.9, 0.99].
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Server port | `3000` |
+| `BRETRICS_PREFIX` | Prefix for web metrics | `bretrics_` |
+| `BRETRICS_PERCENTILES` | Summary percentiles array | `[0.01, 0.1, 0.25, 0.5, 0.75, 0.9, 0.99]` |
+| `BRETRICS_MAXAGESECONDS` | Bucket reset interval (seconds) | `600` |
+| `BRETRICS_AGEBUCKETS` | Sliding window bucket count | `5` |
+| `PROM_PREFIX` | Global Prometheus metrics prefix | `""` |
+| `PROM_ELPRECISION` | Event loop precision (ms) | `100` |
 
-- `-e BRETRICS_MAXAGESECONDS=600` — how old a bucket can be before it is reset, in seconds, default is 600 seconds.
+## 📊 API Reference
 
-- `-e BRETRICS_AGEBUCKETS=5` — configures how many buckets will be in the sliding window for the summary, default is 5.
+### POST `/send-metrics/metrics`
 
-- `-e BRETRICS_PREFIX="bretrics_"` — prefix for web monitoring values,
-  default: bretrics_.
+Submit browser metrics for collection.
 
-- `-e PROM_ELPRECISION=100` — Node.js event loop precision for system metrics, default is 100.
+**Request Body:**
 
-- `-e PROM_PREFIX=""` — prefix for all Prometheus metrics,
-  default: empty string.
+```json
+{
+  "metricName": 123.45,
+  "anotherMetric": {
+    "value": 67.89,
+    "labels": {
+      "path": "/dashboard",
+      "device_type": "desktop"
+    }
+  }
+}
+```
 
-## Prometheus Metrics
+**Response:** `201 Created`
 
-The microservice has built-in Prometheus monitoring and is available at the endpoint `/metrics`.
+### GET `/metrics`
 
-Block this endpoint on your proxy if you do not need to provide access to metrics from outside your network.
+Prometheus metrics endpoint.
 
-## Components for the Web
+**Response:** Prometheus text format with all collected metrics.
 
-To send metrics from the client, you need to write code that will send metrics to the microservice. An [example of such code can be found here](https://web.dev/vitals/).
+## 🌐 Client Integration
+
+To send metrics from the browser, integrate with [Web Vitals](https://web.dev/vitals/):
+
+```javascript
+import { onCLS, onFCP, onLCP, onTTFB } from 'web-vitals';
+
+function sendMetric(metric) {
+  const body = JSON.stringify({
+    [metric.name.toLowerCase()]: {
+      value: metric.value,
+      labels: {
+        path: window.location.pathname,
+        device_type: /Mobile/.test(navigator.userAgent) ? 'mobile' : 'desktop'
+      }
+    }
+  });
+
+  navigator.sendBeacon('/send-metrics/metrics', body);
+}
+
+onCLS(sendMetric);
+onFCP(sendMetric);
+onLCP(sendMetric);
+onTTFB(sendMetric);
+```
+
+## 🔒 Security
+
+> ⚠️ **Important:** The `/metrics` endpoint exposes internal metrics. Block this endpoint on your reverse proxy if external access is not required.
+
+Example nginx configuration:
+
+```nginx
+location /metrics {
+  allow 10.0.0.0/8;
+  deny all;
+}
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
