@@ -10,16 +10,16 @@
 
 Bretrics is a lightweight, high-performance microservice that collects [Web Vitals](https://web.dev/vitals/) and custom metrics from client browsers and exposes them via a Prometheus-compatible endpoint.
 
-## ✨ Features
+## Features
 
-- 📊 **Web Vitals Support** — Collect FCP, LCP, CLS, TTI, and custom metrics
-- 🏷️ **Custom Labels** — Add dimensions like path, device type, or user segments
-- 📈 **Prometheus Native** — Built-in `/metrics` endpoint with configurable percentiles
-- 🐳 **Docker Ready** — Production-ready container images
-- ⚡ **High Performance** — Built on NestJS with minimal overhead
-- 🔧 **Configurable** — Flexible environment variable configuration
+- **Web Vitals Support** — Collect FCP, LCP, CLS, TTI, and custom metrics
+- **Custom Labels** — Add dimensions like path, device type, or user segments
+- **Prometheus Native** — Built-in `/metrics` endpoint with configurable percentiles
+- **Docker Ready** — Production-ready container images
+- **High Performance** — Built on NestJS with minimal overhead
+- **Configurable** — Flexible environment variable configuration
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Using Docker
 
@@ -45,7 +45,7 @@ curl -X POST http://localhost:3000/send-metrics/metrics \
 
 Open [http://localhost:3000/metrics](http://localhost:3000/metrics) to see Prometheus-formatted metrics.
 
-## 📦 Installation
+## Installation
 
 ### Production Deployment
 
@@ -71,7 +71,7 @@ services:
     restart: always
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 All configuration is done via environment variables:
 
@@ -85,7 +85,7 @@ All configuration is done via environment variables:
 | `PROM_PREFIX` | Global Prometheus metrics prefix | `""` |
 | `PROM_ELPRECISION` | Event loop precision (ms) | `100` |
 
-## 📊 API Reference
+## API Reference
 
 ### POST `/send-metrics/metrics`
 
@@ -114,7 +114,7 @@ Prometheus metrics endpoint.
 
 **Response:** Prometheus text format with all collected metrics.
 
-## 🌐 Client Integration
+## Client Integration
 
 To send metrics from the browser, integrate with [Web Vitals](https://web.dev/vitals/):
 
@@ -141,9 +141,9 @@ onLCP(sendMetric);
 onTTFB(sendMetric);
 ```
 
-## 🔒 Security
+## Security
 
-> ⚠️ **Important:** The `/metrics` endpoint exposes internal metrics. Block this endpoint on your reverse proxy if external access is not required.
+> **Important:** The `/metrics` endpoint exposes internal metrics. Block this endpoint on your reverse proxy if external access is not required.
 
 Example nginx configuration:
 
@@ -154,10 +154,10 @@ location /metrics {
 }
 ```
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
