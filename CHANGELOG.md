@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.9] - 2026-01-12
+
+### 🐛 Bug Fixes
+
+- Update documentation commit parser to match both 'doc' and 'docs'
+
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
 ## [1.2.8] - 2026-01-12
 
 # Changelog
